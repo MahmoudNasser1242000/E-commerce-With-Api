@@ -24,6 +24,7 @@ export interface IProduct {
             }
         },
     }
+    quantity: number
 }
 
 export interface IError {

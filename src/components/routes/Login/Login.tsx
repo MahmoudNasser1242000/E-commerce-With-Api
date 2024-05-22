@@ -13,7 +13,7 @@ import {
     useColorModeValue,
     FormHelperText,
     Link,
-    useToast
+    useToast,
 } from "@chakra-ui/react";
 import { useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
@@ -47,25 +47,25 @@ export default function Login() {
     const navigate = useNavigate();
     const cookies = new Cookies();
     let onSubmit: SubmitHandler<Inputs> = async (data) => {
-        setIsLoading(true)
+        setIsLoading(true);
         try {
-            const login = await axiosInstance.post("auth/local", data)
+            const login = await axiosInstance.post("auth/local", data);
             if (login.status === 200) {
                 toast({
-                    title: 'You Are Logged In Now.',
+                    title: "You Are Logged In Now.",
                     description: "Welcome To Enjoy All Of Our Cool Features",
-                    status: 'success',
+                    status: "success",
                     duration: 3000,
                     isClosable: false,
-                    position: "top"
+                    position: "top",
                 });
 
                 const date = new Date();
                 date.setTime(date.getTime() + 1000 * 60 * 60 * 24 * 7 * 4 * 13);
-                cookies.set("jwt", login?.data?.jwt, {path: "/", expires: date});
+                cookies.set("jwt", login?.data?.jwt, { path: "/", expires: date });
 
                 setTimeout(() => {
-                    navigate("/")
+                    navigate("/");
                 }, 3500);
             }
         } catch (error) {
@@ -74,13 +74,13 @@ export default function Login() {
             toast({
                 title: "Sorry, Can't Log In Now.",
                 description: err.response?.data?.error?.message || err.message,
-                status: 'error',
+                status: "error",
                 duration: 3000,
                 isClosable: false,
-                position: "top"
+                position: "top",
             });
         } finally {
-            setIsLoading(false)
+            setIsLoading(false);
         }
     };
     return (
@@ -156,7 +156,7 @@ export default function Login() {
                             <Button
                                 w={"full"}
                                 isLoading={isLoading}
-                                loadingText='Loading...'
+                                loadingText="Loading..."
                                 size="lg"
                                 bg={"blue.400"}
                                 color={"white"}
@@ -170,7 +170,10 @@ export default function Login() {
                         </Stack>
                         <Stack pt={6}>
                             <Text align={"center"}>
-                                Don't Have An Acount? <Link as={RouterLink} color={"blue.400"} to={"/register"}>Sign Up</Link>
+                                Don't Have An Acount?{" "}
+                                <Link as={RouterLink} color={"blue.400"} to={"/register"}>
+                                    Sign Up
+                                </Link>
                             </Text>
                         </Stack>
                     </Stack>

@@ -13,7 +13,7 @@ import {
     useColorModeValue,
     FormHelperText,
     Link,
-    useToast
+    useToast,
 } from "@chakra-ui/react";
 import { useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
@@ -46,36 +46,36 @@ export default function Register() {
     const toast = useToast();
     const navigate = useNavigate();
     let onSubmit: SubmitHandler<Inputs> = async (data) => {
-        setIsLoading(true)
+        setIsLoading(true);
         try {
-            const register = await axiosInstance.post("auth/local/register", data)
+            const register = await axiosInstance.post("auth/local/register", data);
             if (register.status === 200) {
                 toast({
-                    title: 'Account created.',
+                    title: "Account created.",
                     description: "We've created your account for you.",
-                    status: 'success',
+                    status: "success",
                     duration: 3000,
                     isClosable: false,
-                    position: "top"
+                    position: "top",
                 });
 
                 setTimeout(() => {
-                    navigate("/login")
+                    navigate("/login");
                 }, 3500);
             }
         } catch (error) {
             const err = error as AxiosError<IError>;
             // console.log(err);
             toast({
-                title: 'Account Can Not created.',
+                title: "Account Can Not created.",
                 description: err.response?.data?.error?.message || err.message,
-                status: 'error',
+                status: "error",
                 duration: 3000,
                 isClosable: false,
-                position: "top"
+                position: "top",
             });
         } finally {
-            setIsLoading(false)
+            setIsLoading(false);
         }
     };
     return (
@@ -164,7 +164,7 @@ export default function Register() {
                             <Button
                                 w={"full"}
                                 isLoading={isLoading}
-                                loadingText='Loading...'
+                                loadingText="Loading..."
                                 size="lg"
                                 bg={"blue.400"}
                                 color={"white"}
@@ -178,7 +178,10 @@ export default function Register() {
                         </Stack>
                         <Stack pt={6}>
                             <Text align={"center"}>
-                                Already a user? <Link as={RouterLink} color={"blue.400"} to="/login">Login</Link>
+                                Already a user?{" "}
+                                <Link as={RouterLink} color={"blue.400"} to="/login">
+                                    Login
+                                </Link>
                             </Text>
                         </Stack>
                     </Stack>

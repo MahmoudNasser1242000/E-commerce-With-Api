@@ -7,6 +7,7 @@ import Register from './components/routes/Register/Register'
 import Login from './components/routes/Login/Login'
 import ProtectAcount from './components/routes/ProtectAcount/ProtectAcount'
 import ProtectAuth from './components/routes/ProtectAuth/ProtectAuth'
+import DashboardLayOut from './components/routes/DashboardLayOut/DashboardLayOut'
 
 function App() {
 
@@ -16,6 +17,9 @@ function App() {
       {path: "product/:id", element: <ProtectAcount><ProductDetails/></ProtectAcount>},
       {path: "register", element: <ProtectAuth><Register/></ProtectAuth>},
       {path: "login", element: <ProtectAuth><Login/></ProtectAuth>},
+    ]},
+    {path:"/dashboard", element: <DashboardLayOut/>, children: [
+      {index: true, element: ""}
     ]}
   ])
   return <RouterProvider router={routes}></RouterProvider>

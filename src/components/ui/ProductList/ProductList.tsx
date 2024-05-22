@@ -3,6 +3,7 @@ import {
     AlertDescription,
     AlertIcon,
     AlertTitle,
+    Box,
     Card,
     CardBody,
     Container,
@@ -56,12 +57,12 @@ function ProductList({ }: Iprops) {
                                     <Skeleton height="120px" borderRadius={"md"} />
                                     <Stack mt="6" spacing="3">
                                         <Heading size="md"></Heading>
-                                        <Text>
+                                        <Box>
                                             <Skeleton height="20px" />
-                                        </Text>
-                                        <Text color="blue.600" fontSize="2xl">
+                                        </Box>
+                                        <Box color="blue.600" fontSize="2xl">
                                             <Skeleton height="40px" />
-                                        </Text>
+                                        </Box>
                                     </Stack>
                                 </CardBody>
                             </Card>

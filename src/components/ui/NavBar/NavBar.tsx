@@ -15,11 +15,14 @@ import {
     useColorModeValue,
     Stack,
     Image,
+    AvatarBadge,
 } from "@chakra-ui/react";
 import logo from "../../../assets/images/logo.png";
 import { IoClose, IoMenu } from "react-icons/io5";
 import { Link as RouterLink } from "react-router-dom";
 import Cookies from "universal-cookie";
+import { useSelector } from "react-redux";
+import { RootState } from "../../app/Store";
 
 const Links = ["dashboard", "projects", "team"];
 
@@ -39,9 +42,13 @@ const NavLink = ({ children }: { children: ReactNode }) => (
     </Link>
 );
 
-export default function NavBar() {
+interface IProps {
+    onOpen: () => void,
+}
+export default function NavBar({ onOpen: openDrawer }: IProps) {
     const { isOpen, onOpen, onClose } = useDisclosure();
     const cookies = new Cookies();
+    const { cart } = useSelector((state: RootState) => state.cart);
     return (
         <>
             <Box bg={useColorModeValue("gray.100", "gray.900")} px={4}>
@@ -60,7 +67,7 @@ export default function NavBar() {
                             justifyContent={"center"}
                             width={{ base: "100%", md: "auto" }}
                         >
-                            <Link as={RouterLink} to={cookies.get("jwt")? "/" : "#"}>
+                            <Link as={RouterLink} to={cookies.get("jwt") ? "/" : "#"}>
                                 <Image
                                     src={logo}
                                     alt="logo"
@@ -85,6 +92,9 @@ export default function NavBar() {
                         </HStack>
                     </HStack>
                     <Flex alignItems={"center"}>
+                        <Button colorScheme='blue' size='sm' rounded={"5px"} mr={2} onClick={openDrawer}>
+                            Cart ({cart.length})
+                        </Button>
                         <Menu>
                             <MenuButton
                                 as={Button}
@@ -93,25 +103,22 @@ export default function NavBar() {
                                 cursor={"pointer"}
                                 minW={0}
                             >
-                                <Avatar
-                                    size={"sm"}
-                                    src={
-                                        "https://images.unsplash.com/photo-1493666438817-866a91353ca9?ixlib=rb-0.3.5&q=80&fm=jpg&crop=faces&fit=crop&h=200&w=200&s=b616b2c5b373a80ffc9636ba24f7a4a9"
-                                    }
-                                />
+                                <Avatar size={"sm"}>
+                                    {cookies.get("jwt")? <AvatarBadge borderColor='papayawhip' bg='green.500' boxSize='1.25em' /> : ""}
+                                </Avatar>
                             </MenuButton>
                             <MenuList padding={"0"}>
                                 {
                                     !cookies.get("jwt") ? (
-                                    <>
-                                        <MenuItem>
-                                            <RouterLink to={"/register"}>Register</RouterLink>
-                                        </MenuItem>
-                                        <MenuItem>
-                                            <RouterLink to={"/login"}>Login</RouterLink>
-                                        </MenuItem>
-                                    </>
-                                ) : <MenuItem onClick={() => { cookies.remove("jwt") }}>Link 3</MenuItem>
+                                        <>
+                                            <MenuItem>
+                                                <RouterLink to={"/register"}>Register</RouterLink>
+                                            </MenuItem>
+                                            <MenuItem>
+                                                <RouterLink to={"/login"}>Login</RouterLink>
+                                            </MenuItem>
+                                        </>
+                                    ) : <MenuItem onClick={() => { cookies.remove("jwt") }}>Logout</MenuItem>
                                 }
 
                             </MenuList>

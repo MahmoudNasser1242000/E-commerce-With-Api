@@ -1,6 +1,8 @@
 import * as yup from "yup";
+import { IProduct } from "../types";
+import { createStandaloneToast } from "@chakra-ui/react";
 
-
+// register
 export const registerSchema = yup
     .object({
         username: yup
@@ -19,10 +21,13 @@ export const registerSchema = yup
     })
     .required();
 
-
+// login
 export const loginSchema = yup
     .object({
-        identifier: yup.string().email("enter valid email").required("email required"),
+        identifier: yup
+            .string()
+            .email("enter valid email")
+            .required("email required"),
         password: yup
             .string()
             .matches(
@@ -32,3 +37,35 @@ export const loginSchema = yup
             .required("password is required"),
     })
     .required();
+
+//cart shop
+const {toast} = createStandaloneToast()
+export const handleProductQuantity = (
+    cartList: IProduct[],
+    product: IProduct
+) => {
+    const cartProduct = cartList.find((prod) => prod.id === product.id);
+
+    if (cartProduct) {
+        toast({
+            title: "Add Another One Of This Product.",
+            description: "This Product Is Allready Exist",
+            status: "info",
+            duration: 3000,
+            isClosable: false,
+            position: "top",
+        });
+        cartProduct.quantity = cartProduct.quantity + 1
+        return cartList
+    } else {
+        toast({
+            title: "Product Added Successfully.",
+            description: "check Yor Cart To Show Your Product",
+            status: "success",
+            duration: 3000,
+            isClosable: false,
+            position: "top",
+        });
+        return [...cartList, { ...product, quantity: 1 }];
+    }
+};
