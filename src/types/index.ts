@@ -31,5 +31,12 @@ export interface IError {
     error: {
         message: string
     }
+}
 
+export interface IProductInputs {
+    title: string,
+    description: string,
+    price: string,
+    thumbnail: string | File,
+    category: string,
 }

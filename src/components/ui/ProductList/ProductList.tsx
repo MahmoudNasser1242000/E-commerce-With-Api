@@ -17,10 +17,12 @@ import Product from "../Product/Product";
 import { useQuery } from "@tanstack/react-query";
 import axiosInstance from "../../../Config/axiosInstance";
 import { IProduct } from "../../../types";
+import Cookies from "universal-cookie";
 
 interface Iprops { }
 
 function ProductList({ }: Iprops) {
+    const cookies = new Cookies();
     const { isLoading, error, data } = useQuery({
         queryKey: ["getProducts"],
         queryFn: async () => {
@@ -29,7 +31,7 @@ function ProductList({ }: Iprops) {
                 {
                     headers: {
                         Authorization:
-                            "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNzE2MDUyOTQ1LCJleHAiOjE3MTg2NDQ5NDV9.9ACnV6WNK0NWqqdnFt2QtLaCGf0TkAnHZZA6rH9hNc8",
+                            `Bearer ${cookies.get("jwt")}`,
                     },
                 }
             );
@@ -37,7 +39,7 @@ function ProductList({ }: Iprops) {
         },
     });
 
-    console.log(error);
+    // console.log(error);
 
     return (
         <Container maxWidth={"none"} mt={"30px"}>

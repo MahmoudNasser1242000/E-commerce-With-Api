@@ -3,6 +3,7 @@ import { configureStore } from "@reduxjs/toolkit";
 import { useDispatch } from "react-redux";
 import CartSlice from "./Cart/CartSlice";
 import { persistStore, persistReducer, WebStorage } from "redux-persist";
+import { productSlice } from './Products/ProductSlice';
 
 
 interface IPersistConfig {
@@ -19,7 +20,12 @@ const persistedCard = persistReducer(persistCongfigCart, CartSlice);
 const store = configureStore({
   reducer: {
     cart: persistedCard,
+    [productSlice.reducerPath]: productSlice.reducer,
   },
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware({
+      serializableCheck: false
+    }).concat(productSlice.middleware),
 });
 
 export const persistor = persistStore(store)
