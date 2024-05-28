@@ -23,12 +23,14 @@ import {
     useDeleteDahboardProductsMutation,
     useGetDahboardProductsQuery,
     useUpdateDahboardProductsMutation,
-} from "../../app/Products/ProductSlice";
-import { IProduct } from "../../../types";
-import OpenModal from "../../ui/Modal/Modal";
-import UpdateBody from "../../ui/Modal/UpdateBody";
+} from "../../../app/Products/ProductSlice";
+import { IProduct } from "../../../../types";
+import OpenModal from "../../../ui/Modal/Modal";
+import UpdateBody from "../../../ui/Modal/UpdateBody";
 import { FaEye, FaPencilAlt, FaTrash } from "react-icons/fa";
 import { useState } from "react";
+import { useSelector } from "react-redux";
+import { RootState } from "../../../app/Store";
 
 function DashboardProducts() {
     const { isOpen, onOpen, onClose } = useDisclosure();
@@ -36,6 +38,7 @@ function DashboardProducts() {
     const [thumbnail, setThumbnail] = useState<File | any>(null);
     const [productIndex, setProductIndex] = useState<number>(0);
     const [productUpdate, setProductUpdate] = useState({});
+    const {internetMode} = useSelector((state: RootState) =>  state.internet );
 
     const changeProductInputs = (
         e: React.ChangeEvent<HTMLInputElement>
@@ -72,7 +75,7 @@ function DashboardProducts() {
         onOpen();
     };
 
-    if (isLoading) {
+    if (isLoading || internetMode) {
         return Array.from({ length: 8 }, (_, index) => (
             <Flex
                 key={index}

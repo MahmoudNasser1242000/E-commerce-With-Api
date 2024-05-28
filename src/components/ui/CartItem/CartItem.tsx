@@ -6,7 +6,7 @@ import { removeFromCart } from "../../app/Cart/CartSlice";
 
 function CartItem({ attributes, id, quantity }: IProduct) {
     const dispatch = useDispatch();
-    console.log(quantity);
+    // console.log(quantity);
     
     return (
         <>

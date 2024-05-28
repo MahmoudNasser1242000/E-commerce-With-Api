@@ -25,10 +25,13 @@ import { IError } from "../../../types";
 import { AxiosError } from "axios";
 import { Link as RouterLink, useNavigate } from "react-router-dom";
 import Cookies from "universal-cookie";
+import { useSelector } from "react-redux";
+import { RootState } from "../../app/Store";
 
 export default function Login() {
     const [showPassword, setShowPassword] = useState(false);
     const [isLoading, setIsLoading] = useState<boolean>(false);
+    const {internetMode} = useSelector((state: RootState) =>  state.internet );
 
     interface Inputs {
         identifier: string;
@@ -155,7 +158,7 @@ export default function Login() {
                         <Stack spacing={10} pt={2}>
                             <Button
                                 w={"full"}
-                                isLoading={isLoading}
+                                isLoading={isLoading || internetMode}
                                 loadingText="Loading..."
                                 size="lg"
                                 bg={"blue.400"}

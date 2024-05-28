@@ -11,6 +11,8 @@ import {
 } from "@chakra-ui/react";
 import { ReactNode } from "react";
 import { IProduct } from "../../../types";
+import { useSelector } from "react-redux";
+import { RootState } from "../../app/Store";
 
 interface IProps {
     title: string;
@@ -38,6 +40,8 @@ export default function OpenModal({
     children,
     thumbnail
 }: IProps) {
+
+    const {internetMode} = useSelector((state: RootState) =>  state.internet );
 
     const toast = useToast();    
     const deleteAction = () => { 
@@ -107,7 +111,7 @@ export default function OpenModal({
                         </Button>
                         <Button
                             onClick={() => { action === "Delete"? deleteAction() : updateAction() }}
-                            isLoading={Loading}
+                            isLoading={Loading || internetMode}
                             rounded={"4px"}
                             // variant="outline"
                             colorScheme={

@@ -10,18 +10,21 @@ import {
 import { Provider } from 'react-redux'
 import store, { persistor } from './components/app/Store.ts'
 import { PersistGate } from 'redux-persist/integration/react'
+import InternetConnectionServiceProvider from './services/InternetConnectionService.tsx'
 
 const queryClient = new QueryClient()
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
-    <Provider store={store}>
-      <PersistGate persistor={persistor}>
-        <QueryClientProvider client={queryClient}>
-          <ChakraProvider>
-            <App />
-          </ChakraProvider>
-        </QueryClientProvider >
-      </PersistGate>
-    </Provider>
+    <QueryClientProvider client={queryClient}>
+      <Provider store={store}>
+        <InternetConnectionServiceProvider>
+          <PersistGate persistor={persistor}>
+            <ChakraProvider>
+              <App />
+            </ChakraProvider>
+          </PersistGate>
+        </InternetConnectionServiceProvider>
+      </Provider>
+    </QueryClientProvider >
   </React.StrictMode>,
 )

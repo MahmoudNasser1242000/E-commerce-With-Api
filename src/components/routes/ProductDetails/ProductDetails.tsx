@@ -22,8 +22,9 @@ import axiosInstance from "../../../Config/axiosInstance";
 import { useEffect, useState } from "react";
 import { IProduct } from "../../../types";
 import Cookies from "universal-cookie";
-import { useAppDispatch } from "../../app/Store";
+import { RootState, useAppDispatch } from "../../app/Store";
 import { addToCart } from "../../app/Cart/CartSlice";
+import { useSelector } from "react-redux";
 
 interface Iprops { }
 
@@ -33,6 +34,7 @@ function ProductDetails({ }: Iprops) {
     const [isLoading, setIsLoading] = useState<boolean>(true);
     const [error, setError] = useState<boolean>(false);
     const [details, setDetails] = useState<IProduct | null>(null);
+    const {internetMode} = useSelector((state: RootState) =>  state.internet );
     
     const colorMode = useColorModeValue("6px 6px 0 black", "6px 6px 0 cyan");
     if (!colorMode) {
@@ -67,7 +69,7 @@ function ProductDetails({ }: Iprops) {
     return (
         <>
             <Center py={6}>
-                {isLoading ? (
+                {isLoading || internetMode? (
                     <Card
                         width={{ base: "100%", lg: "23%", md: "30.3333%", sm: "40%" }}
                         mt={"20px"}

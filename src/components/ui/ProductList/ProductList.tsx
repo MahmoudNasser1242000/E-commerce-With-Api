@@ -18,10 +18,14 @@ import { useQuery } from "@tanstack/react-query";
 import axiosInstance from "../../../Config/axiosInstance";
 import { IProduct } from "../../../types";
 import Cookies from "universal-cookie";
+import { useSelector } from "react-redux";
+import { RootState } from "../../app/Store";
 
 interface Iprops { }
 
 function ProductList({ }: Iprops) {
+    const {internetMode} = useSelector((state: RootState) =>  state.internet );
+
     const cookies = new Cookies();
     const { isLoading, error, data } = useQuery({
         queryKey: ["getProducts"],
@@ -52,7 +56,7 @@ function ProductList({ }: Iprops) {
                 width={"100%"}
             >
                 {
-                    isLoading ? (
+                    isLoading || internetMode? (
                         Array.from({ length: 3 }, (_, index) => (
                             <Card key={index} width={{ base: "100%", lg: "23%", md: "30.3333%", sm: "40%" }}>
                                 <CardBody>
