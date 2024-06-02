@@ -23,7 +23,7 @@ import { Link as RouterLink, useNavigate } from "react-router-dom";
 import Cookies from "universal-cookie";
 import { useSelector } from "react-redux";
 import { RootState } from "../../app/Store";
-import { useGetUserInformationsQuery } from "../../app/UserInfo/UserInfoSlice";
+import { useGetUserInformationsQuery } from "../../app/UserInfoSlice/UserInfoSlice";
 
 const Links = ["dashboard", "projects", "team"];
 

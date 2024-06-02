@@ -7,7 +7,7 @@ import profileImageSlice from "./ProfileImageId/ProfileImageSlice";
 import { persistStore, persistReducer, WebStorage } from "redux-persist";
 import { productSlice } from './Products/ProductSlice';
 import { categorySlice } from './Category/categorySlice';
-import { UserInfoSlice } from './UserInfo/UserInfoSlice';
+import { UserInfoSlice } from './UserInfoSlice/UserInfoSlice';
 
 
 interface IPersistConfig {

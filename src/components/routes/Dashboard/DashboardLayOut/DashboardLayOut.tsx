@@ -34,7 +34,7 @@ import {
 } from 'react-icons/fi';
 import { IconType } from 'react-icons';
 import { Outlet } from 'react-router-dom';
-import { useGetUserInformationsQuery } from '../../../app/UserInfo/UserInfoSlice';
+import { useGetUserInformationsQuery } from '../../../app/UserInfoSlice/UserInfoSlice';
 import Cookies from 'universal-cookie';
 
 interface LinkItemProps {
