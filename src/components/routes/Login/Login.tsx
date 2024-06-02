@@ -25,18 +25,18 @@ import { IError } from "../../../types";
 import { AxiosError } from "axios";
 import { Link as RouterLink, useNavigate } from "react-router-dom";
 import Cookies from "universal-cookie";
-import { useSelector } from "react-redux";
 import { RootState } from "../../app/Store";
+import { useSelector } from "react-redux";
 
+interface Inputs {
+    identifier: string;
+    password: string;
+}
 export default function Login() {
     const [showPassword, setShowPassword] = useState(false);
     const [isLoading, setIsLoading] = useState<boolean>(false);
-    const {internetMode} = useSelector((state: RootState) =>  state.internet );
+    const { internetMode } = useSelector((state: RootState) => state.internet);
 
-    interface Inputs {
-        identifier: string;
-        password: string;
-    }
     const {
         register,
         handleSubmit,
@@ -52,7 +52,10 @@ export default function Login() {
     let onSubmit: SubmitHandler<Inputs> = async (data) => {
         setIsLoading(true);
         try {
-            const login = await axiosInstance.post("auth/local", data);
+            const login = await axiosInstance.post(
+                "auth/local",
+                data
+            );
             if (login.status === 200) {
                 toast({
                     title: "You Are Logged In Now.",
@@ -65,9 +68,9 @@ export default function Login() {
 
                 const date = new Date();
                 date.setTime(date.getTime() + 1000 * 60 * 60 * 24 * 7 * 4 * 13);
-                cookies.set("jwt", login?.data?.jwt, { path: "/", expires: date });
-
+                
                 setTimeout(() => {
+                    cookies.set("jwt", login?.data?.jwt, { path: "/", expires: date });
                     navigate("/");
                 }, 3500);
             }

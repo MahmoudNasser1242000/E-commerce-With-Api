@@ -9,7 +9,7 @@ function Product({attributes, id }: IProduct) {
             <Card maxWidth={{base:"100%", lg:"23%", md: "30.3333%", sm:"40%"}}>
                 <CardBody>
                     <Image
-                        src={`${import.meta.env.VITE_LOCAL_HOST}${attributes.thumbnail.data.attributes.formats.thumbnail.url}`}
+                        src={`${attributes.thumbnail.data.attributes.formats.thumbnail.url}`}
                         alt='Green double couch with wooden legs'
                         borderRadius='md'
                         height={"140px"}

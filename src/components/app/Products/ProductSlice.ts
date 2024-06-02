@@ -1,5 +1,6 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 import Cookies from 'universal-cookie';
+import { IAddProductForm } from '../../../types';
 // import { IProduct } from '../../../types';
 
 // Define a service using a base URL and expected endpoints
@@ -18,7 +19,7 @@ export const productSlice = createApi({
       providesTags: (result) =>
         result
           ? [
-              ...result?.data?.map(({ id }: {id: number}) => ({ type: 'products' as const, id })),
+              ...result?.data?.map(({ id }: {id: number}) => ({ type: 'Products' as const, id })),
               { type: 'Products', id: 'LIST' },
             ]
           : [{ type: 'Products', id: 'LIST' }],
@@ -62,9 +63,24 @@ export const productSlice = createApi({
         }
       }    
     }),
+
+    
+    addDahboardProducts: builder.mutation({
+      query: (body: IAddProductForm) => {
+        return {
+          url: `/api/products`,
+          method: "POST", 
+          headers: {
+            Authorization: `Bearer ${cookies.get("jwt")}`
+          }
+          ,body
+        }
+      },
+      invalidatesTags: [{ type: 'Products', id: 'LIST' }],
+    }),
   }),
 })
 
 // Export hooks for usage in functional components, which are
 // auto-generated based on the defined endpoints
-export const { useGetDahboardProductsQuery, useDeleteDahboardProductsMutation, useUpdateDahboardProductsMutation } = productSlice
+export const { useGetDahboardProductsQuery, useDeleteDahboardProductsMutation, useUpdateDahboardProductsMutation, useAddDahboardProductsMutation } = productSlice

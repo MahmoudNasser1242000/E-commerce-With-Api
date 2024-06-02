@@ -7,7 +7,7 @@ import {
     Text,
 } from "@chakra-ui/react";
 import { FcMultipleCameras } from "react-icons/fc";
-import { IProduct } from "../../../types";
+import { IAddProductForm } from "../../../types";
 import { useGetDahboardCategoriesQuery } from "../../app/Category/categorySlice";
 
 interface IProps {
@@ -15,12 +15,12 @@ interface IProps {
         e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
     ) => void;
     changeProductThumbnail: (e: React.ChangeEvent<HTMLInputElement>) => void;
-    productUpdate: IProduct["attributes"] | any;
+    addProductForm: IAddProductForm;
 }
-const UpdateBody = ({
+const AddProductBody = ({
     changeProductInputs,
     changeProductThumbnail,
-    productUpdate,
+    addProductForm,
 }: IProps) => {
     const { data } = useGetDahboardCategoriesQuery(1);
     // console.log(data);
@@ -34,7 +34,7 @@ const UpdateBody = ({
                     onChange={(e) => {
                         changeProductInputs(e);
                     }}
-                    value={productUpdate?.title}
+                    value={addProductForm?.title}
                 />
             </FormControl>
 
@@ -45,7 +45,7 @@ const UpdateBody = ({
                     onChange={(e) => {
                         changeProductInputs(e);
                     }}
-                    value={productUpdate?.description}
+                    value={addProductForm?.description}
                 />
             </FormControl>
             <FormControl mt={4}>
@@ -85,7 +85,19 @@ const UpdateBody = ({
                     onChange={(e) => {
                         changeProductInputs(e);
                     }}
-                    value={productUpdate?.price}
+                    value={addProductForm?.price}
+                />
+            </FormControl>
+            <FormControl mt={4}>
+                <FormLabel>Stock</FormLabel>
+                <Input
+                    min={1}
+                    type="number"
+                    name="stock"
+                    onChange={(e) => {
+                        changeProductInputs(e);
+                    }}
+                    value={addProductForm?.stock}
                 />
             </FormControl>
             <FormControl mt={4}>
@@ -110,4 +122,4 @@ const UpdateBody = ({
     );
 };
 
-export default UpdateBody;
+export default AddProductBody;

@@ -122,8 +122,7 @@ function ProductDetails({ }: Iprops) {
                     >
                         <Box h={"200px"} borderBottom={"1px"} borderColor="black">
                             <Img
-                                src={`${import.meta.env.VITE_LOCAL_HOST}${details?.attributes.thumbnail.data.attributes.formats
-                                        .thumbnail.url
+                                src={`${details?.attributes.thumbnail.data.attributes.formats.thumbnail.url
                                     }`}
                                 roundedTop={"sm"}
                                 objectFit="fill"

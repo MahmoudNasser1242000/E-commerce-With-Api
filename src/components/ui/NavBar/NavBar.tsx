@@ -1,4 +1,4 @@
-import { ReactNode } from "react";
+import { ReactNode, useEffect } from "react";
 import {
     Box,
     Flex,
@@ -19,10 +19,11 @@ import {
 } from "@chakra-ui/react";
 import logo from "../../../assets/images/logo.png";
 import { IoClose, IoMenu } from "react-icons/io5";
-import { Link as RouterLink } from "react-router-dom";
+import { Link as RouterLink, useNavigate } from "react-router-dom";
 import Cookies from "universal-cookie";
 import { useSelector } from "react-redux";
 import { RootState } from "../../app/Store";
+import { useGetUserInformationsQuery } from "../../app/UserInfo/UserInfoSlice";
 
 const Links = ["dashboard", "projects", "team"];
 
@@ -43,12 +44,24 @@ const NavLink = ({ children }: { children: ReactNode }) => (
 );
 
 interface IProps {
-    onOpen: () => void,
+    onOpen: () => void;
 }
 export default function NavBar({ onOpen: openDrawer }: IProps) {
     const { isOpen, onOpen, onClose } = useDisclosure();
     const cookies = new Cookies();
     const { cart } = useSelector((state: RootState) => state.cart);
+    const navigate = useNavigate();
+
+    const { data, refetch } = useGetUserInformationsQuery("me");
+    // console.log(data?.profileImage?.formats?.thumbnail?.url);
+    // console.log(cookies.get("jwt"));
+
+    useEffect(() => {
+        if (cookies.get("jwt")) {
+            refetch();
+        }
+    }, [cookies.get("jwt")]);
+
     return (
         <>
             <Box bg={useColorModeValue("gray.100", "gray.900")} px={4}>
@@ -84,17 +97,25 @@ export default function NavBar({ onOpen: openDrawer }: IProps) {
                             justifyContent={"center"}
                             width={"100%"}
                         >
-                            {
-                                cookies.get("jwt")
-                                    ? Links.map((link) => <NavLink key={link}>{link}</NavLink>)
-                                    : ""
-                            }
+                            {cookies.get("jwt")
+                                ? Links.map((link) => <NavLink key={link}>{link}</NavLink>)
+                                : ""}
                         </HStack>
                     </HStack>
                     <Flex alignItems={"center"}>
-                        <Button colorScheme='blue' size='sm' rounded={"5px"} mr={2} onClick={openDrawer}>
-                            Cart ({cart.length})
-                        </Button>
+                        {cookies.get("jwt") ? (
+                            <Button
+                                colorScheme="blue"
+                                size="sm"
+                                rounded={"5px"}
+                                mr={2}
+                                onClick={openDrawer}
+                            >
+                                Cart ({cart.length})
+                            </Button>
+                        ) : (
+                            ""
+                        )}
                         <Menu>
                             <MenuButton
                                 as={Button}
@@ -103,24 +124,45 @@ export default function NavBar({ onOpen: openDrawer }: IProps) {
                                 cursor={"pointer"}
                                 minW={0}
                             >
-                                <Avatar size={"sm"}>
-                                    {cookies.get("jwt")? <AvatarBadge borderColor='papayawhip' bg='green.500' boxSize='1.25em' /> : ""}
+                                <Avatar
+                                    size={"sm"}
+                                    src={
+                                        cookies.get("jwt")
+                                            ? data?.profileImage?.formats?.thumbnail?.url
+                                            : "https://bit.ly/broken-link"
+                                    }
+                                >
+                                    {cookies.get("jwt") ? (
+                                        <AvatarBadge
+                                            borderColor="papayawhip"
+                                            bg="green.500"
+                                            boxSize="1.25em"
+                                        />
+                                    ) : (
+                                        ""
+                                    )}
                                 </Avatar>
                             </MenuButton>
                             <MenuList padding={"0"}>
-                                {
-                                    !cookies.get("jwt") ? (
-                                        <>
-                                            <MenuItem>
-                                                <RouterLink to={"/register"}>Register</RouterLink>
-                                            </MenuItem>
-                                            <MenuItem>
-                                                <RouterLink to={"/login"}>Login</RouterLink>
-                                            </MenuItem>
-                                        </>
-                                    ) : <MenuItem onClick={() => { cookies.remove("jwt") }}>Logout</MenuItem>
-                                }
-
+                                {!cookies.get("jwt") ? (
+                                    <>
+                                        <MenuItem>
+                                            <RouterLink to={"/register"}>Register</RouterLink>
+                                        </MenuItem>
+                                        <MenuItem>
+                                            <RouterLink to={"/login"}>Login</RouterLink>
+                                        </MenuItem>
+                                    </>
+                                ) : (
+                                    <MenuItem
+                                        onClick={() => {
+                                            navigate("/login");
+                                            cookies.remove("jwt");
+                                        }}
+                                    >
+                                        Logout
+                                    </MenuItem>
+                                )}
                             </MenuList>
                         </Menu>
                     </Flex>
@@ -129,16 +171,14 @@ export default function NavBar({ onOpen: openDrawer }: IProps) {
                 {isOpen ? (
                     <Box pb={4} display={{ md: "none" }}>
                         <Stack as={"nav"} spacing={4}>
-                            {
-                                cookies.get("jwt")
-                                    ? Links.map((link) => <NavLink key={link}>{link}</NavLink>)
-                                    : (
-                                        <>
-                                            <RouterLink to={"/register"}>Register</RouterLink>
-                                            <RouterLink to={"/login"}>Login</RouterLink>
-                                        </>
-                                    )
-                            }
+                            {cookies.get("jwt") ? (
+                                Links.map((link) => <NavLink key={link}>{link}</NavLink>)
+                            ) : (
+                                <>
+                                    <RouterLink to={"/register"}>Register</RouterLink>
+                                    <RouterLink to={"/login"}>Login</RouterLink>
+                                </>
+                            )}
                         </Stack>
                     </Box>
                 ) : null}

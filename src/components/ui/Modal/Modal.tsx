@@ -10,7 +10,7 @@ import {
     useToast,
 } from "@chakra-ui/react";
 import { ReactNode } from "react";
-import { IProduct } from "../../../types";
+import { IAddProductForm, IProduct } from "../../../types";
 import { useSelector } from "react-redux";
 import { RootState } from "../../app/Store";
 
@@ -22,6 +22,8 @@ interface IProps {
     Error: boolean,
     productIndex: number,
     productUpdate: IProduct["attributes"] | any
+    addProductForm: IAddProductForm,
+    updateThumbnail: React.Dispatch<File | any>
     actionFunc: (arg: any)=> void
     onClose: () => void;
     children: ReactNode,
@@ -35,6 +37,8 @@ export default function OpenModal({
     Error,
     productIndex,
     productUpdate,
+    addProductForm,
+    updateThumbnail,
     actionFunc,
     onClose,
     children,
@@ -72,11 +76,12 @@ export default function OpenModal({
             JSON.stringify({
                 title: productUpdate?.title,
                 description: productUpdate?.description,
-                price: productUpdate.price,
+                price: productUpdate?.price,
+                category: productUpdate?.category
             })
         )
         formData.append("files.thumbnail", thumbnail);
-
+        
         actionFunc({id: productIndex, body: formData});
         if (!Error) {
             toast({
@@ -87,9 +92,44 @@ export default function OpenModal({
                 position: "top",
             });
             onClose();
+            updateThumbnail(null)
         } else {
             toast({
                 title: "Can't Update Product.",
+                status: "error",
+                duration: 3000,
+                isClosable: false,
+                position: "top",
+            });
+        }
+    }
+
+    const addAction = () => { 
+        const formData = new FormData();
+        formData.append("data", 
+            JSON.stringify({
+                title: addProductForm?.title,
+                description: addProductForm?.description,
+                price: addProductForm?.price,
+                stock: addProductForm?.stock,
+                category: addProductForm?.category,
+            })
+        );
+        formData.append("files.thumbnail", thumbnail);
+        
+        actionFunc(formData);
+        if (!Error) {
+            toast({
+                title: "Product Added Successfully",
+                status: "success",
+                duration: 3000,
+                isClosable: false,
+                position: "top",
+            });
+            onClose();
+        } else {
+            toast({
+                title: "Can't Add Product.",
                 status: "error",
                 duration: 3000,
                 isClosable: false,
@@ -110,7 +150,7 @@ export default function OpenModal({
                             Close
                         </Button>
                         <Button
-                            onClick={() => { action === "Delete"? deleteAction() : updateAction() }}
+                            onClick={() => { action === "Delete"? deleteAction() : action === "Update"? updateAction() : addAction() }}
                             isLoading={Loading || internetMode}
                             rounded={"4px"}
                             // variant="outline"

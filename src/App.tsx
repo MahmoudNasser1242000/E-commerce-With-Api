@@ -10,8 +10,10 @@ import ProtectAuth from './components/routes/ProtectAuth/ProtectAuth'
 import DashboardLayOut from './components/routes/Dashboard/DashboardLayOut/DashboardLayOut'
 import DashboardProducts from './components/routes/Dashboard/DashboardProducts/DashboardProducts'
 
-function App() {
 
+function App() {
+  
+  
   const routes = createBrowserRouter([
     {path: "/", element: <Layout/>, children: [
       {index: true, element: <ProtectAcount><Home/></ProtectAcount>},

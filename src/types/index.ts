@@ -15,12 +15,16 @@ export interface IProduct {
         thumbnail: {
             data: {
                 attributes: {
-                    formats: {
+                    formats?: {
                         thumbnail: {
                             url: string
                         }
                     }
                 }
+            }
+        } | {
+            data: {
+                attributes: any
             }
         },
     }
@@ -39,4 +43,12 @@ export interface IProductInputs {
     price: string,
     thumbnail: string | File,
     category: string,
+}
+
+export interface IAddProductForm {
+    title: string,
+    description: string,
+    price: string,
+    stock: string,
+    category: string 
 }

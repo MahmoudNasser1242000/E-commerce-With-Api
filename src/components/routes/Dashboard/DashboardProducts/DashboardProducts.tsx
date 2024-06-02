@@ -20,13 +20,15 @@ import {
     useDisclosure,
 } from "@chakra-ui/react";
 import {
+    useAddDahboardProductsMutation,
     useDeleteDahboardProductsMutation,
     useGetDahboardProductsQuery,
     useUpdateDahboardProductsMutation,
 } from "../../../app/Products/ProductSlice";
-import { IProduct } from "../../../../types";
+import { IAddProductForm, IProduct } from "../../../../types";
 import OpenModal from "../../../ui/Modal/Modal";
 import UpdateBody from "../../../ui/Modal/UpdateBody";
+import AddProductBody from "../../../ui/Modal/AddProductBody";
 import { FaEye, FaPencilAlt, FaTrash } from "react-icons/fa";
 import { useState } from "react";
 import { useSelector } from "react-redux";
@@ -38,23 +40,37 @@ function DashboardProducts() {
     const [thumbnail, setThumbnail] = useState<File | any>(null);
     const [productIndex, setProductIndex] = useState<number>(0);
     const [productUpdate, setProductUpdate] = useState({});
-    const {internetMode} = useSelector((state: RootState) =>  state.internet );
+    const [addProductForm, setAddProductForm] = useState<IAddProductForm>({
+        title: "",
+        description: "",
+        price: "",
+        stock: "",
+        category: "0"
+    });
+    const { internetMode } = useSelector((state: RootState) => state.internet);
 
-    const changeProductInputs = (
-        e: React.ChangeEvent<HTMLInputElement>
-    ) => {
+    const changeProductInputs = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
         const { value, name } = e.target;
-        setProductUpdate((prev: IProduct) => {
-            return {
-                ...prev,
-                [name]: name === "price" ? +value : value,
-            };
-        });
+        if (action === "Update") {
+            setProductUpdate((prev: IProduct) => {
+                return {
+                    ...prev,
+                    [name]: name === "price" || name === "category" ? +value : value,
+                };
+            });
+        } else if (action === "Add Product") {
+            setAddProductForm((prev) => {
+                return {
+                    ...prev,
+                    [name]: name === "price" || name === "category" ? +value : value,
+                };
+            });
+        }
     };
 
     const changeProductThumbnail = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { files } = e.target;
-        setThumbnail(files? files[0]: null)
+        setThumbnail(files ? files[0] : null);
     };
 
     const { isLoading, error, data } = useGetDahboardProductsQuery(1);
@@ -62,6 +78,8 @@ function DashboardProducts() {
         useDeleteDahboardProductsMutation();
     const [updateProduct, { isLoading: updateLoading, isError: updateError }] =
         useUpdateDahboardProductsMutation();
+    const [AddProduct, { isLoading: addLoading, isError: addError }] =
+        useAddDahboardProductsMutation();
 
     // console.log(error);
     // console.log(data?.data[0].attributes);
@@ -139,6 +157,14 @@ function DashboardProducts() {
     }
     return (
         <>
+            <Box textAlign={"end"}>
+                <Button colorScheme="blue" rounded={"4px"} my={4} onClick={()=>{
+                    onOpen();
+                    setAction("Add Product");
+                }}>
+                    Add Product
+                </Button>
+            </Box>
             <TableContainer>
                 <Table variant="striped" colorScheme="blue">
                     <TableCaption>Imperial to metric conversion factors</TableCaption>
@@ -163,11 +189,11 @@ function DashboardProducts() {
                                     <Td>
                                         <Image
                                             boxSize="30px"
-                                            src={`${import.meta.env.VITE_LOCAL_HOST}${prod.attributes.thumbnail.data.attributes.formats
-                                                    .thumbnail.url
+                                            src={`${prod.attributes.thumbnail.data.attributes.formats.thumbnail.url
                                                 }`}
                                             borderRadius="full"
                                             alt={prod.attributes.title}
+                                            objectFit={"cover"}
                                         />
                                     </Td>
                                     <Td>{prod.attributes.stock}</Td>
@@ -181,7 +207,7 @@ function DashboardProducts() {
                                                 size={"sm"}
                                                 mx={1}
                                                 onClick={() => {
-                                                    setProductUpdate(prod.attributes)
+                                                    setProductUpdate(prod.attributes);
                                                     getActionAndIndex("Update", prod.id);
                                                 }}
                                             >
@@ -229,27 +255,35 @@ function DashboardProducts() {
                         </Tr>
                     </Tfoot>
                 </Table>
-            </TableContainer>
+            </TableContainer >
 
             <OpenModal
                 title="Delete Product"
                 action={action}
                 isOpen={isOpen}
                 onClose={onClose}
-                Loading={action === "Delete"? deleteLoading: updateLoading}
-                Error={action === "Delete"? deleteError: updateError}
+                Loading={action === "Delete" ? deleteLoading : action === "Update"? updateLoading : addLoading}
+                Error={action === "Delete" ? deleteError : action === "Update"? updateError : addError}
                 productIndex={productIndex}
-                actionFunc={action === "Delete" ? deleteProduct : updateProduct}
+                actionFunc={action === "Delete" ? deleteProduct : action === "Update"? updateProduct: AddProduct}
                 productUpdate={productUpdate}
+                addProductForm={addProductForm}
                 thumbnail={thumbnail}
+                updateThumbnail={setThumbnail}
             >
                 {action === "Delete" ? (
                     "Are You Sure You Want To Delete This Product?"
-                ) : (
+                ) : action === "Update"? (
                     <UpdateBody
                         changeProductInputs={changeProductInputs}
                         changeProductThumbnail={changeProductThumbnail}
                         productUpdate={productUpdate}
+                    />
+                ) : (
+                    <AddProductBody
+                        changeProductInputs={changeProductInputs}
+                        changeProductThumbnail={changeProductThumbnail}
+                        addProductForm={addProductForm}
                     />
                 )}
             </OpenModal>
