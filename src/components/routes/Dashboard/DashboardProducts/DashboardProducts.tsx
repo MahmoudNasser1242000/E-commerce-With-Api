@@ -258,7 +258,7 @@ function DashboardProducts() {
             </TableContainer >
 
             <OpenModal
-                title="Delete Product"
+                title={`${action} Product`}
                 action={action}
                 isOpen={isOpen}
                 onClose={onClose}

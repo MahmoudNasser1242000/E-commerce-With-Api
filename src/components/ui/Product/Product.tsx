@@ -1,6 +1,7 @@
 import { Card, CardBody, Image, Stack, Heading, Text, Button } from '@chakra-ui/react'
 import { IProduct } from '../../../types'
 import { Link } from 'react-router-dom'
+import { memo } from 'react'
 
 function Product({attributes, id }: IProduct) {
     
@@ -33,4 +34,4 @@ function Product({attributes, id }: IProduct) {
     )
 }
 
-export default Product
+export default memo(Product)

@@ -7,6 +7,7 @@ import { removeFromCart } from "../../app/Cart/CartSlice";
 function CartItem({ attributes, id, quantity }: IProduct) {
     const dispatch = useDispatch();
     // console.log(quantity);
+    console.log(attributes.thumbnail);
     
     return (
         <>
@@ -17,7 +18,7 @@ function CartItem({ attributes, id, quantity }: IProduct) {
                     alignItems={"center"}
                 >
                     <Image
-                        src={`${import.meta.env.VITE_LOCAL_HOST}${attributes.thumbnail.data.attributes.formats.thumbnail.url
+                        src={`${attributes.thumbnail.data.attributes.url
                             }`}
                         alt=""
                         rounded={"50%"}

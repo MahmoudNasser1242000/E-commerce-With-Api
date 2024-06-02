@@ -1,4 +1,4 @@
-import { ReactNode, useEffect } from "react";
+import { ReactNode, memo, useEffect } from "react";
 import {
     Box,
     Flex,
@@ -46,7 +46,7 @@ const NavLink = ({ children }: { children: ReactNode }) => (
 interface IProps {
     onOpen: () => void;
 }
-export default function NavBar({ onOpen: openDrawer }: IProps) {
+function NavBar({ onOpen: openDrawer }: IProps) {
     const { isOpen, onOpen, onClose } = useDisclosure();
     const cookies = new Cookies();
     const { cart } = useSelector((state: RootState) => state.cart);
@@ -186,3 +186,5 @@ export default function NavBar({ onOpen: openDrawer }: IProps) {
         </>
     );
 }
+
+export default memo(NavBar)

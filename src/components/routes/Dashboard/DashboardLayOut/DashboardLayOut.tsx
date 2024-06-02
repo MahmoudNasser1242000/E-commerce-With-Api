@@ -21,7 +21,7 @@ import {
     MenuItem,
     MenuList,
 } from '@chakra-ui/react';
-import { Link as RouterLink } from "react-router-dom";
+import { Link as RouterLink, useNavigate } from "react-router-dom";
 import {
     FiHome,
     FiTrendingUp,
@@ -35,6 +35,7 @@ import {
 import { IconType } from 'react-icons';
 import { Outlet } from 'react-router-dom';
 import { useGetUserInformationsQuery } from '../../../app/UserInfo/UserInfoSlice';
+import Cookies from 'universal-cookie';
 
 interface LinkItemProps {
     name: string;
@@ -149,6 +150,8 @@ interface MobileProps extends FlexProps {
 }
 const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
     const { data } = useGetUserInformationsQuery("me");
+    const navigate = useNavigate();
+    const cookies = new Cookies();
     return (
         <Flex
             ml={{ base: 0, md: 60 }}
