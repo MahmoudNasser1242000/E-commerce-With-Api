@@ -5,7 +5,7 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 export const categorySlice = createApi({
     reducerPath: 'categoriesApi',
     tagTypes: ["Categories"],
-    baseQuery: fetchBaseQuery({ baseUrl: import.meta.env.VITE_LOCAL_HOST }),
+    baseQuery: fetchBaseQuery({ baseUrl: "http://localhost:1337" }),
     endpoints: (builder) => ({
         getDahboardCategories: builder.query({
             query: (page) => {

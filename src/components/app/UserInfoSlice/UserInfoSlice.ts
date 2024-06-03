@@ -6,7 +6,7 @@ const cookies = new Cookies();
 export const UserInfoSlice = createApi({
     reducerPath: 'userApi',
     tagTypes: ["User"],
-    baseQuery: fetchBaseQuery({ baseUrl: import.meta.env.VITE_LOCAL_HOST }),
+    baseQuery: fetchBaseQuery({ baseUrl: "http://localhost:1337" }),
     endpoints: (builder) => ({
         getUserInformations: builder.query({
             query: (acount: string) => {

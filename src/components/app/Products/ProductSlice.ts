@@ -59,7 +59,7 @@ export const productSlice = createApi({
         try {
           await queryFulfilled
         } catch {
-          patchResult.undo()
+          patchResult.undo();
         }
       }    
     }),
