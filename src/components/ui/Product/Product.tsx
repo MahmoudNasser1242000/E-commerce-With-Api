@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom'
 import { memo } from 'react'
 
 function Product({attributes, id }: IProduct) {
+    console.log(attributes);
     
     return (
         <>
