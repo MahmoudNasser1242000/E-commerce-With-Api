@@ -8,7 +8,7 @@ const cookies = new Cookies();
 export const productSlice = createApi({
   reducerPath: 'productsApi',
   tagTypes: ["Products"],
-  baseQuery: fetchBaseQuery({ baseUrl: import.meta.env.VITE_LOCAL_HOST }),
+  baseQuery: fetchBaseQuery({ baseUrl: "http://localhost:1337" }),
   endpoints: (builder) => ({
     getDahboardProducts: builder.query({
       query: (page: number) => {
