@@ -81,7 +81,7 @@ function DashboardProducts() {
     const [AddProduct, { isLoading: addLoading, isError: addError }] =
         useAddDahboardProductsMutation();
 
-    // console.log(error);
+    console.log(data);
     // console.log(data?.data[0].attributes);
 
     const getActionAndIndex = (
