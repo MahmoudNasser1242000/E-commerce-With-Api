@@ -1,4 +1,1 @@
-{ 
-    "rewrites": [{ "source": "/(.*)", "destination": "/" }],
-    "framework": "reactjs"
-}
+{ "rewrites": [{ "source": "/(.*)", "destination": "/" }] }
